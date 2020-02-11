@@ -101,8 +101,7 @@ module.exports = class HelpCommand extends Command {
         }
     }
       }catch(e){
-	this.client.error(this.client, message, e);
-	this.client.logger(this.client, message, e.stack)
+        this.client.handleError(this.client, message, e)
       }
 }
 };
