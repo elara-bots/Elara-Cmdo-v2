@@ -111,13 +111,7 @@ class ReactionHandler extends ReactionCollector {
 		else return this.stop();
 
 		this.on('collect', (reaction, user) => {
-			reaction.users.forEach(m => {
-				if(m.id === this.client.user.id){
-					return;
-				}else{
-					reaction.users.remove(m.id)
-				}
-			})
+			reaction.users.cache.filter(u => !u.bot).forEach(m => reaction.users.cache.remove(m.id))
 			this[this.methodMap.get(reaction.emoji.name)](user);
 		});
 		setTimeout(() => {this.emit("end")}, this.time || 120000)
