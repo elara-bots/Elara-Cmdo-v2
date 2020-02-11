@@ -39,7 +39,7 @@ module.exports = class BotinfoCommand extends Command {
         - Status: ${this.client.util.status[this.client.user.presence.status]} ${statuses[this.client.user.presence.status]}
         - Prefixes: \`${await this.client.getPrefix(message.guild)}\`, \`@${this.client.user.tag}\`
         - Owner${this.client.owners.length === 1 ? "" : "s"}: ${await this.client.owners.map(c => `\`${c.tag}\``).join(', ')}
-        - Mutual Server${this.client.guilds.filter(g => g.members.get(message.author.id)).size === 1 ? "" : "s"}: ${this.client.guilds.filter(g => g.members.get(message.author.id)).size}
+        - Mutual Server${this.client.guilds.cache.filter(g => g.members.cache.get(message.author.id)).size === 1 ? "" : "s"}: ${this.client.guilds.cache.filter(g => g.members.cache.get(message.author.id)).size}
         - Shards: ${this.client.ws.shards.map(c => c).length}
 
         **__Links__**
