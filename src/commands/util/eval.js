@@ -69,9 +69,9 @@ async run(message, args) {
 			}
 		};
 		if(message.guild){
-			const emojis = message.client.emojis, 
-			channels = message.client.channels, 
-			guilds = message.client.guilds, 
+			const emojis = message.client.emojis.cache, 
+			channels = message.client.channels.cache, 
+			guilds = message.client.guilds.cache, 
 			currency = message.guild.currency, 
 			color = message.guild.color
 		}
