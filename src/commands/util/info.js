@@ -43,11 +43,7 @@ module.exports = class BotinfoCommand extends Command {
 
         **__Links__**
         - Support: [Link](${this.client.options.invite})
-        - Invite: [Link](${this.client.config.links.invite})
-        - Github: [Link](${this.client.config.links.github})
-        - DBL: [Link](${this.client.config.links.dblpro})
-        - Vote: [Link](${this.client.config.links.dblpro}/vote)
-        - Feedback & Bug Reports: [Link](${this.client.config.links.web.feedback})
+        - Feedback & Bug Reports: [Link](https://services.superchiefyt.tk/site/feedback)
         `)
         return message.channel.send(embed).catch(() => {})
     }
