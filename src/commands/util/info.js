@@ -17,6 +17,7 @@ module.exports = class BotinfoCommand extends Command {
 
     }
     async run(message) {
+        try{
         const statuses = {
             "online": "Online", 
             "idle": "Idle",
@@ -46,5 +47,8 @@ module.exports = class BotinfoCommand extends Command {
         - Feedback & Bug Reports: [Link](https://services.superchiefyt.tk/site/feedback)
         `)
         return message.channel.send(embed).catch(() => {})
+        }catch(e){
+          this.client.handleError(this.client, message, e)
+        }
     }
 }
