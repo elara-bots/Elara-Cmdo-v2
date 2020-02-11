@@ -30,8 +30,7 @@ module.exports = class NCommand extends Command {
         .setDescription(links.join('\n') + `\n[Support Server](${this.client.options.invite})`)
         return message.channel.send(e)
         }catch(e){
-            this.client.error(this.client, message, e);
-            this.client.logger(this.client, message, e.stack)
+           this.client.handleError(this.client, message, e)
         }
     }
 }
