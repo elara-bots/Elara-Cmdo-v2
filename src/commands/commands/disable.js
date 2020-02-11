@@ -42,8 +42,8 @@ module.exports = class DisableCommandCommand extends Command {
 		if(args.cmdOrGrp.guarded) return msg.channel.send({embed: thismsg(msg, `${args.cmdOrGrp.group ? "Command" : "Group"} (${args.cmdOrGrp.name}) is guarded so it cannot be disabled!`)})
 		this.client.dbs.settings.findOne({guildID: msg.guild.id}, async (err, db) => {
 			if(db){
-				if(!db.misc.commands.includes(args.cmdOrGrp.name)){
-				db.misc.commands.push(args.cmdOrGrp.name);
+				if(!db.misc.disabled.includes(args.cmdOrGrp.name)){
+				db.misc.disabled.push(args.cmdOrGrp.name);
 				db.save().catch(() => {})
 				}
 			}
