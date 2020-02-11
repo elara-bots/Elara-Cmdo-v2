@@ -9,14 +9,12 @@ const {MessageEmbed} = require('discord.js'),
       return args
       .replace(new RegExp(config.token, "g"), "")
 	  .replace(config.mongo, "")
-	  .replace(new RegExp(config.webhooks.audit, "g"), "")
-	  .replace(new RegExp(config.misc.website.admin, "g"), "")
-      .replace(new RegExp(config.webhooks.log, "g"), "")
-      .replace(new RegExp(config.webhooks.error, "g"), "")
-      .replace(new RegExp(config.webhooks.servers, "g"), "")
-      .replace(new RegExp(config.webhooks.action, "g"), "")
-      .replace(new RegExp(config.apis.IMDB, "g"), "")
-      .replace(new RegExp(config.apis.api, "g"), "")
+	  .replace(new RegExp((config.webhooks.audit|| "Not set"), "g"), "")
+	  .replace(new RegExp((config.misc.website.admin || "Not set"), "g"), "")
+      .replace(new RegExp((config.webhooks.log || "Not set"), "g"), "")
+      .replace(new RegExp((config.webhooks.error || "Not set"), "g"), "")
+      .replace(new RegExp((config.webhooks.servers|| "Not set"), "g"), "")
+	  .replace(new RegExp((config.webhooks.action || "Not set"), "g"), "")      
       };
 require("moment-duration-format")
 module.exports = class EvalCommand extends Command {
