@@ -42,8 +42,8 @@ module.exports = class EnableCommandCommand extends Command {
 		args.cmdOrGrp.setEnabledIn(msg.guild, true);
 		this.client.dbs.settings.findOne({guildID: msg.guild.id}, async (err, db) => {
 			if(db){
-				if(db.misc.commands.includes(args.cmdOrGrp.name)){
-				db.misc.commands = db.misc.commands.filter(c => c !== args.cmdOrGrp.name);
+				if(db.misc.disabled.includes(args.cmdOrGrp.name)){
+				db.misc.disabled = db.misc.disabled.filter(c => c !== args.cmdOrGrp.name);
 				db.save().catch(() => {})
 				}
 			}
