@@ -37,7 +37,7 @@ module.exports = class PingCommand extends Command {
             .setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
         message.edit(embed);
         }catch(e){
-		msg.channel.send(`Error while running command:\n${e}`)
+ 		 this.client.handleError(this.client, msg, e)
         }
     }
 };
