@@ -312,18 +312,8 @@ declare module 'elaracmdo' {
 			dms: string[];
 		};
 		public apis: {
-			paladins: {
-				devID: string;
-				key: string;
-			},
-			IMDB: string;
 			hastebin: string;
 			api: string;
-			fortnite: string;
-			giphy: string;
-			twitch: string;
-			youtube: string;
-			dbl: string;
 		}
 		public presence: {
 			random: {
@@ -337,12 +327,10 @@ declare module 'elaracmdo' {
 		};
 		public webhooks: {
 			audit: string;
-			mentions: string;
 			log: string;
 			error: string;
 			servers: string; 
 			action: string; 
-			feedback: string;
 			database: string;
 		};
 		public misc: {
@@ -350,8 +338,6 @@ declare module 'elaracmdo' {
 			prefix: string;
 			logs: boolean;
 			disable: boolean;
-			dms: boolean;
-			VIP: string[];
 			website: {
 				admin: string;
 				normal: string;
@@ -360,24 +346,12 @@ declare module 'elaracmdo' {
 			commandfolders: string[];
 			commandGroups: string[]; 
 		};
-		public links: {
-			dblpro: string;
-			github: string;
-			invite: string;
-			web: {
-				feedback: string;
-			}
-		};
 		private token: string;
 		private mongo: string;
-		private rexexp(str: string): string;
 	}
 	export class DBType{
-		public users: string;
 		public dev: string;
 		public settings: string;
-		public coins: string;
-		public config: string;
 	}
 	export class DBSearch{
 		public name: string;
@@ -386,20 +360,12 @@ declare module 'elaracmdo' {
 	export class FunctionsList{
 		public create(type: string, args: CommandoGuild|User|CommandoClient|string, user: User|CommandoClient|string): Promise<void>;
 		public delete(type: string, args: CommandoGuild|User|CommandoClient|string, user: User|CommandoClient|string): Promise<void>;
-		public invite(client: CommandoClient, guild: CommandoGuild, cache: boolean): Promise<string>;
+		
 		public reason(client: CommandoClient, guild: CommandoGuild, setting: string, reason: string): Promise<void>;
-		public logbots(client: CommandoClient, guild: CommandoGuild, user: User): Promise<boolean>;
-		public ignore(client: CommandoClient, guild: CommandoGuild, channel: Channel): Promise<boolean>;
 		public maint(client: CommandoClient): Promise<boolean>;
-		public audit(guild: CommandoGuild, type: string, all: boolean): Promise<void>;
 		public connect(url: string): Promise<void>;
 		public message: {
-			commands(client: CommandoClient, message: CommandoMessage): Promise<void>;
 			main(client: CommandoClient, message: CommandoMessage): Promise<void>;
-			pings(client: CommandoClient, message: CommandoMessage): Promise<void>;
-			back(client: CommandoClient, message: CommandoMessage): Promise<void>;
-			coins(client: CommandoClient, message: CommandoMessage): Promise<void>;
-			devmention(client: CommandoClient, message: CommandoMessage): Promise<void>;
 			dms(client: CommandoClient, message: CommandoMessage): Promise<void>;
 		};
 		public misc: {
@@ -413,8 +379,6 @@ declare module 'elaracmdo' {
 			Format(amount: number): string;
 			Enabled(boolean: boolean): string;
 			shards(id: number, event: string, color: string, footer: string, error: string): Promise<void>;
-			userdb(client: CommandoClient, user: User): Promise<void>;
-			coinsEnabled(guild: CommandoGuild): Promise<void>; 
 		};
 		public embed(message: CommandoMessage, options: {
 			title: string,
@@ -433,7 +397,6 @@ declare module 'elaracmdo' {
 				icon_url: string
 			}
 		}): Promise<void>;
-		public embeds(type: string, message: CommandoMessage, user: User, data: object, guild: CommandoGuild, self: CommandoClient, mod: string): Promise<void>;
 		public starting(client: CommandoClient): Promise<void>;
 		public errors: {
 			commandError(client: CommandoClient, cmd: string, message: CommandoMessage, error: string, args: string): Promise<void>;
