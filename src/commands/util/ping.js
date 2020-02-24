@@ -13,29 +13,29 @@ module.exports = class PingCommand extends Command {
             aliases: ["pong", "pung", `uptime`],
             guildOnly: false,
 	    clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
-            throttling: {
-                usages: Globalcooldown.usage,
-                duration: Globalcooldown.duration
-            },
+            throttling: Globalcooldown.default,
         });
     }
 
     async run(msg) {
         try{
-        let loadingembed = new Discord.MessageEmbed()
-            .setColor(msg.guild ? msg.guild.color : this.client.util.colors.default)
-            .setDescription(`${this.client.util.emojis.eload} Loading.`)
-            .setTimestamp()
-        const message = await msg.channel.send(loadingembed);
-        let embed = new Discord.MessageEmbed()
-            .setColor(msg.guild ? msg.guild.color : this.client.util.colors.default)
-            .setTitle(`${this.client.util.emojis.robot} Status ${this.client.util.emojis.robot}`)
-            .setFooter(msg.author.tag, msg.author.displayAvatarURL())
-            .addField(`Message Latency`, `${message.createdTimestamp - msg.createdTimestamp}ms`, true)
-            .addField(`API Latency`, `${Math.round(this.client.ws.ping)}ms`, true)
-            .addField(`Uptime`, `${moment.duration(this.client.uptime).format(" D [Days], H [Hours], m [Minutes], s [Seconds]")}`, true)
-            .setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
-        message.edit(embed);
+	let message = await msg.channel.send({embed: {color: this.client.util.colors.default, description: `${this.client.getEmoji("eload")} Loading..`, timestamp: new Date()}})
+   	message.edit({
+	   embed: {
+		color: this.client.getColor(msg.guild),
+		title: `${this.client.getEmoji("robot")} Status ${this.client.getEmoji("robot")}`,
+		footer: {
+		   text: msg.author.tag, icon_url: msg.author.displayAvatarURL()
+		},
+		author: {name: this.client.user.tag, icon_url: this.client.user.displayAvatarURL()},
+		fields: [
+			{name: `Message Latency`, value: `${message.createdTimestamp - msg.createdTimestamp}ms`, inline: true},
+			{name: `API Latency`, value: `${Math.round(this.client.ws.ping)}ms`, inline: true},
+			{name: `Uptime`, value: `${moment.duration(this.client.uptime).format(" D [Days], H [Hours], m [Minutes], s [Seconds]")}`, inline: true}
+		]
+		
+	   }
+	});
         }catch(e){
  		 this.client.handleError(this.client, msg, e)
         }
