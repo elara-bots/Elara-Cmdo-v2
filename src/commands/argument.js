@@ -183,7 +183,7 @@ class Argument {
 			.setColor(msg.client.getColor(msg.guild))
 			.setTitle(`INFO`)
 			.setDescription(`${empty ? this.prompt : valid ? valid : `You provided an invalid ${this.label}. Please try again.`}`)
-			.addField(`\u200b`, `Respond with \`cancel\` to cancel the command!\nDon't include the prefix and command name`)
+			.normalizeField(`\u200b`, `Respond with \`cancel\` to cancel the command!\nDon't include the prefix and command name`)
 			.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
 			prompts.push(await msg.channel.send(er));
 
@@ -273,7 +273,7 @@ class Argument {
 							"${escaped.length < 1850 ? escaped : '[too long to show]'}".
 							Please try again.
 						`}`)
-					.addField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.\nDon't include the prefix and command name`)
+					.normalizeField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.\nDon't include the prefix and command name`)
 					.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
 					prompts.push(await msg.channel.send(er).catch(() => {}));
 				} else if(results.length === 0) {
@@ -282,7 +282,7 @@ class Argument {
 					.setColor(msg.client.getColor(msg.guild))
 					.setTitle(`INFO`)
 					.setDescription(`${this.prompt}`)
-					.addField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.\nDon't include the prefix and command name`)
+					.normalizeField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.\nDon't include the prefix and command name`)
 					.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
 					prompts.push(await msg.channel.send(er).catch(() => {}));
 				}
