@@ -20,7 +20,7 @@ const cooldowns = {
             let e = new MessageEmbed()
             .setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
             .setTitle(`Maintenance Mode`)
-            .addField(`Support Server`, msg.client.options.invite, true)
+            .normalizeField(`Support Server`, msg.client.options.invite, true)
             .setColor(msg.client.getColor(msg.guild))
             .setTimestamp()
 	    	.setFooter(`This message will delete in 10 seconds`)
@@ -419,7 +419,7 @@ class Command {
 		.setTitle(`Command "${message.command.name}" **Error**`)
 		.setDescription(`\`\`\`js\n${err}\`\`\``)
 		
-		if(!this.client.isOwner(message.author.id)) ee.addField(`Please contact ${ownerList || "The Bot Developer"}`, `${invite ? ` in this server: ${invite}` : "\u200b"}`)
+		if(!this.client.isOwner(message.author.id)) ee.normalizeField(`Please contact ${ownerList || "The Bot Developer"}`, `${invite ? ` in this server: ${invite}` : "\u200b"}`)
 		.setFooter(`This has been reported to the bot developer(s)`)
 		return message.channel.send(ee).catch(() => {})
 	}
