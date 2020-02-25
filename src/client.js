@@ -93,10 +93,41 @@ class CommandoClient extends discord.Client {
 		* @type {ElaraUtil}
 		*/
 		this.util = eutil;
-        this.GlobalCmds = []; 
+        	this.GlobalCmds = []; 
 		this.main = false; 
 		this.GlobalUsers = [];
-        this.afkUsers = new discord.Collection();
+        	this.afkUsers = new discord.Collection();
+		this.error = async function(msg, error, valid = [], del = false, options = {thumbnail: "", image: ""}){
+                let e = new MessageEmbed()
+                .setAuthor(msg.author.tag, msg.author.displayAvatarURL())
+                .setColor(msg.client.getColor(msg.guild))
+                .setDescription(error)
+                .setTimestamp()
+                .setTitle(`INFO`)
+                if(options.thumbnail !== "") e.setThumbnail(options.thumbnail);
+                if(options.image !== "") e.setImage(options.image);
+                if(valid.length !== 0){
+                e.normalizeField(`Valid Responses`, valid.map(c => `\`\`${c}\`\``).join(', '))
+                }
+                if(msg.channel.type === 'dm') return msg.channel.send(e).then(msgs => {
+                    if(del){
+                        msgs.delete({timeout: 10000}).catch(() => {})
+                    }
+                }).catch(() => {});
+                if(msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS') == true){
+                    msg.channel.send(e).then(msgs => {
+                        if(del){
+                            msgs.delete({timeout: 10000}).catch(() => {})
+                        }
+                    }).catch(() => {})
+                }else{
+                    msg.channel.send(`**__INFO__**\n\`\`\`js\n${error}\`\`\``).then(msgs => {
+                        if(del){
+                            msgs.delete({timeout: 10000}).catch(() => {})
+                        }
+                    }).catch(() => {})
+                }
+            }
 		/**
 		* To get the prefix of the guild/client provided
 		* @type {function}
