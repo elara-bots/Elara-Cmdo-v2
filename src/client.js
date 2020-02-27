@@ -93,41 +93,47 @@ class CommandoClient extends discord.Client {
 		* @type {ElaraUtil}
 		*/
 		this.util = eutil;
-        	this.GlobalCmds = []; 
+        this.GlobalCmds = []; 
 		this.main = false; 
 		this.GlobalUsers = [];
-        	this.afkUsers = new discord.Collection();
-		this.error = async function(msg, error, valid = [], del = false, options = {thumbnail: "", image: ""}){
-                let e = new MessageEmbed()
-                .setAuthor(msg.author.tag, msg.author.displayAvatarURL())
-                .setColor(msg.client.getColor(msg.guild))
-                .setDescription(error)
-                .setTimestamp()
-                .setTitle(`INFO`)
-                if(options.thumbnail !== "") e.setThumbnail(options.thumbnail);
-                if(options.image !== "") e.setImage(options.image);
-                if(valid.length !== 0){
-                e.normalizeField(`Valid Responses`, valid.map(c => `\`\`${c}\`\``).join(', '))
-                }
-                if(msg.channel.type === 'dm') return msg.channel.send(e).then(msgs => {
+        this.afkUsers = new discord.Collection();
+		this.error = async function(msg, error, valid = [], del = false, options = {thumbnail: null, image: null}){
+				let fields = [];
+				if(valid.length !== 0) fields.push({name: `Valid Responses`, value: valid.map(v => `\`${v}\``).join(", ")});
+				let embed = {
+					embed: {
+						title: `INFO`,
+						color: msg.client.getColor(msg.guild),
+						author: {
+							name: msg.author.tag,
+							icon_url: msg.author.displayAvatarURL()
+						},
+						timestamp: new Date(),
+						description: error,
+						fields: fields,
+						thumbnail: {
+							url: options.thumbnail
+						},
+						image: {
+							url: options.image
+						}
+					}
+				};
+                if(msg.channel.type === 'dm') return msg.channel.send(embed).then(msgs => {
                     if(del){
                         msgs.delete({timeout: 10000}).catch(() => {})
                     }
                 }).catch(() => {});
                 if(msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS') == true){
-                    msg.channel.send(e).then(msgs => {
+                    msg.channel.send(embed).then(msgs => {
                         if(del){
                             msgs.delete({timeout: 10000}).catch(() => {})
                         }
                     }).catch(() => {})
                 }else{
-                    msg.channel.send(`**__INFO__**\n\`\`\`js\n${error}\`\`\``).then(msgs => {
-                        if(del){
-                            msgs.delete({timeout: 10000}).catch(() => {})
-                        }
-                    }).catch(() => {})
+					msg.channel.send(`**Error:** I don't have 'Embed Links' permission in this channel, contact one of the staff members to fix this issue!`).catch(() => {});
                 }
-            }
+        }
 		/**
 		* To get the prefix of the guild/client provided
 		* @type {function}
