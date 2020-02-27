@@ -17,14 +17,21 @@ const cooldowns = {
             if(cooldowns.maintenance.data.has(msg.author.id)) return null;
             if(!cooldowns.maintenance.data.has(msg.author.id)) cooldowns.maintenance.data.add(msg.author.id)
             setTimeout(() => {cooldowns.maintenance.data.delete(msg.author.id)}, cooldowns.maintenance.time)
-            let e = new MessageEmbed()
-            .setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
-            .setTitle(`Maintenance Mode`)
-            .normalizeField(`Support Server`, msg.client.options.invite, true)
-            .setColor(msg.client.getColor(msg.guild))
-            .setTimestamp()
-	    	.setFooter(`This message will delete in 10 seconds`)
-            return msg.channel.send(e).then(m => m.delete({timeout: 10000}).catch(o => {}))
+            return msg.channel.send({
+				embed: {
+					title: `Maintenance Mode`,
+					author: {
+						name: msg.client.user.tag,
+						value: msg.client.user.displayAvatarURL()
+					},
+					color: msg.client.getColor(msg.guild),
+					timestamp: new Date(),
+					footer: {
+						text: `This message will be deleted in 10 seconds.`
+					},
+					fields: [{name: `Support Server`, value: msg.client.options.invite, inline: true}]
+				}
+			}).then(m => m.delete({timeout: 10000}).catch(o => {}))
         },
 		cmdschannel: async (message) => {
 			if(!message.guild.me.client.dbs) return null;
@@ -34,15 +41,18 @@ const cooldowns = {
             if(message.deleted == false){
             message.delete({timeout: 100}).catch(o => {});
             }
-            let db = await message.guild.me.client.dbs.settings.findOne({guildID: message.guild.id});
-            let e = new MessageEmbed()
-            .setTitle(`INFO`)
-            .setColor(message.client.me.getColor(message.guild))
-			.setFooter(`This message will delete in 10 seconds`)
-			.setAuthor(message.guild.name, message.guild.iconURL())
-			.setFooter(message.author.tag, message.author.displayAvatarURL())
-			.setDescription(`You are unable to use commands in this channel, please go to <#${db.channels.commands}> to use the commands.`)
-            return message.channel.send(message.author, {embed: e}).then(m => m.delete({timeout: 10000}).catch(o => {}))
+            return message.channel.send(message.author, {embed: {
+				title: `INFO`,
+				color: message.client.getColor(message.guild),
+				description: `You are unable to use commands in this channel, please go to <#${message.guild.commands}> to use the commands!`,
+				author: {
+					name: message.guild.name, 
+					icon_url: message.guild.iconURL()
+				},
+				footer: {
+					text: `This message will be deleted in 10 seconds!`
+				}
+			}}).then(m => m.delete({timeout: 10000}).catch(o => {}))
         }
 }
 /** A command that can be run in a client */
@@ -178,6 +188,13 @@ class Command {
 		 * @type {boolean}
 		 */
 		this.ownerOnly = Boolean(info.ownerOnly);
+
+		/**
+		 * Whether the command can only be used in DMs
+		 * @type {boolean}
+		 */
+		this.dmsOnly = Boolean(info.dmsOnly || false);
+
 
 		/**
 		 * Permissions required by the client to use the command.
@@ -333,64 +350,57 @@ class Command {
 	 * @returns {Promise<?Message|?Array<Message>>}
 	 */
 	onBlock(message, reason, data) {
-		let embed = new MessageEmbed()
-		.setAuthor(message.client.user.tag, message.client.user.displayAvatarURL())
-		.setColor(message.guild ? message.guild.color: message.client.util.colors.default)
-		.setTitle(`INFO`)
-		.setTimestamp()
+		function sendErr(description, title = "INFO"){
+			if(message.channel.type === "dm"){
+				return message.channel.send({embed: {
+					author: {
+						name: message.client.user.tag,
+						icon_url: message.client.user.displayAvatarURL()
+					},
+					title: title,
+					timestamp: new Date(),
+					color: message.client.getColor(message.guild),
+					description: description
+				}}).catch(() => {});
+			}
+			if(message.channel.permissionsFor(message.guild.me).has("EMBED_LINKS")){
+				return message.channel.send({embed: {
+					author: {
+						name: message.client.user.tag,
+						icon_url: message.client.user.displayAvatarURL()
+					},
+					title: title,
+					timestamp: new Date(),
+					color: message.client.getColor(message.guild),
+					description: description
+				}}).catch(() => {});
+			}else{
+				return message.channel.send(description).catch(() => {});
+			}
+		};
 		if(CommandCooldown.has(message.author.id)) return null;
 		if(!CommandCooldown.has(message.author.id)) CommandCooldown.add(message.author.id)
 		setTimeout(() => {CommandCooldown.delete(message.author.id)}, 5000)
 		switch(reason) {
-			case 'guildOnly':
-				embed.setDescription(`${this.name}, can only be used in a server.`)
-				return message.channel.send(embed).catch(() => {});
-			case 'nsfw':
-			    embed.setDescription(`${this.name}, can't be used in this channel.`)
-			    return message.channel.send(embed).catch(() => {})
+			case 'guildOnly': return sendErr(`Command (\`${this.name}\`) can only be used in a server channel!`);
+			case "dmsOnly": return sendErr(`Command (\`${this.name}\`) can only be used in my DMs!`);
+			case 'nsfw': return sendErr(`Command (\`${this.name}\`) can't be used in this channel, it isn't marked as NSFW!`);
 			case 'permission': {
 				if(data.response){
-					embed.setDescription(data.response);
-					return message.channel.send(embed).catch(() => {})
+					return sendErr(data.response);
 				}
-				embed.setDescription(`You don't have permission to use command: ${this.name}`)
-				return message.channel.send(embed).catch(() => {})
+				return sendErr(`Command (\`${this.name}\`) you don't have permissions to use this command!`);
 			}
 			case 'clientPermissions': {
-				if(data.missing.length === 1) {
-					embed.setDescription(`I need the "${permissions[data.missing[0]]}" permission for the \`${this.name}\` command to work.`)
-					if(message.channel.permissionsFor(message.client.user).has("EMBED_LINKS")){
-					return message.channel.send(embed).catch(() => {})
-					}else{
-					return message.channel.send(embed.description).catch(() => {})
-					}
-				}
-				embed.setDescription(`I need the following permissions for the \`${this.name}\` command to work:\n${data.missing.map(perm => permissions[perm]).join(', ')}`)
-				if(message.channel.permissionsFor(message.client.user).has("EMBED_LINKS")){
-				   return message.channel.send(embed).catch(() => {})
-				}else{
-				   return message.channel.send(embed.description).catch(() => {})
-				}
+				if(data.missing.length === 1) return sendErr(`I need the "${permissions[data.missing[0]]}" permission for the \`${this.name}\` command to work.`)
+				return sendErr(`I need the following permissions for the \`${this.name}\` command to work:\n${data.missing.map(perm => permissions[perm]).join(', ')}`)
 			}
-			case 'throttling': {
-			embed.setTitle(`HOLD UP!`)
-			.setDescription(`You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`)
-			return message.channel.send(embed).catch(() => {})
-			}
-			case "blacklist": {
-				return null;
-			};
-			case "maintenance":{
-				return functions.msg(message);
-			};
-			case "channel": {
-				return functions.cmdschannel(message);
-			}
-			case "GlobalDisable": {
-				return message.channel.send(embed.setTitle(`Command (\`${this.name}\`) is disabled by the bot developers`)).catch(() => {})
-			}
-			default:
-				return null;
+			case 'throttling': return sendErr(`You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`, `HOLD UP!`);
+			case "blacklist": return null;
+			case "maintenance": return functions.msg(message);
+			case "channel": return functions.cmdschannel(message);
+			case "GlobalDisable": return sendErr(`\`${this.name}\` is disabled globally by the bot developer(s)`, `Command Disabled`)
+			default: return null;
 		}
 	}
 
@@ -405,23 +415,23 @@ class Command {
 	 * @returns {Promise<?Message|?Array<Message>>}
 	 */
 	onError(err, message, args, fromPattern, result) { // eslint-disable-line no-unused-vars
-		const owners = this.client.owners;
-		const ownerList = owners ? owners.map((usr, i) => {
-			const or = i === owners.length - 1 && owners.length > 1 ? 'or ' : '';
-			return `${or}${escapeMarkdown(usr.username)}#${usr.discriminator}`;
-		}).join(owners.length > 2 ? ', ' : ' ') : '';
-
-		const invite = this.client.options.invite;
-		let ee = new MessageEmbed()
-		.setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
-		.setColor(this.client.util.colors.default)
-		.setTimestamp()
-		.setTitle(`Command "${message.command.name}" **Error**`)
-		.setDescription(`\`\`\`js\n${err}\`\`\``)
-		
-		if(!this.client.isOwner(message.author.id)) ee.normalizeField(`Please contact ${ownerList || "The Bot Developer"}`, `${invite ? ` in this server: ${invite}` : "\u200b"}`)
-		.setFooter(`This has been reported to the bot developer(s)`)
-		return message.channel.send(ee).catch(() => {})
+		return message.channel.send({embed: {
+			author: {
+				name: this.client.user.tag,
+				icon_url: this.client.user.displayAvatarURL()
+			},
+			color: message.client.getColor(message.guild),
+			timestamp: new Date(),
+			title: `Command "${message.command.name}" ERROR`,
+			description: `\`\`\`js\n${err}\`\`\``,
+			fields: this.client.isOwner(message.author.id) === false ? [{name: `Please contact ${this.client.owners ? this.client.owners.map((usr, i) => {
+				const or = i === this.client.owners.length - 1 && this.client.owners.length > 1 ? 'or ' : '';
+				return `${or}${escapeMarkdown(usr.username)}#${usr.discriminator}`;
+			}).join(this.client.owners.length > 2 ? ', ' : ' ') : '' || "The bot Developer"}`, value: `${this.client.options.invite ? ` in this server: ${this.client.options.invite}` : "\u200b"}`}] : [],
+			footer: {
+				text: `This has been reported to the bot developer(s)`
+			}
+		}}).catch(() => {})
 	}
 
 	/**
@@ -578,6 +588,9 @@ class Command {
 		}
 		if(info.aliases && info.aliases.some(ali => ali !== ali.toLowerCase())) {
 			throw new RangeError('Command aliases must be lowercase.');
+		}
+		if(info.guildOnly === true && info.dmsOnly) {
+			throw new TypeError(`"guildOnly" and "dmsOnly" can't be enabled at the same time, where the hell do people run the command!!`);
 		}
 		if(typeof info.group !== 'string') throw new TypeError('Command group must be a string.');
 		if(info.group !== info.group.toLowerCase()) throw new RangeError('Command group must be lowercase.');
