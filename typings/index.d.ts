@@ -645,6 +645,7 @@ declare module 'elaracmdo' {
 		name: string;
 		aliases?: string[];
 		autoAliases?: boolean;
+		dmsOnly: boolean;
 		group: string;
 		memberName: string;
 		description: string;
