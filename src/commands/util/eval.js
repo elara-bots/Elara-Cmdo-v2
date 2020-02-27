@@ -11,7 +11,7 @@ const {MessageEmbed} = require('discord.js'),
 	  .replace(config.mongo, "")
 	  .replace(new RegExp((config.webhooks.audit|| "Not set"), "g"), "")
 	  .replace(new RegExp((config.misc.website.admin || "Not set"), "g"), "")
-      .replace(new RegExp((config.webhooks.log || "Not set"), "g"), "")
+      .replace(new RegExp((config.webhooks.status || "Not set"), "g"), "")
       .replace(new RegExp((config.webhooks.error || "Not set"), "g"), "")
       .replace(new RegExp((config.webhooks.servers|| "Not set"), "g"), "")
 	  .replace(new RegExp((config.webhooks.action || "Not set"), "g"), "")      
