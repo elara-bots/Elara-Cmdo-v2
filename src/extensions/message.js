@@ -258,12 +258,15 @@ module.exports = Structures.extend('Message', Message => {
 					 * (if applicable - see {@link Command#run})
 					 */
 					this.client.emit('commandCancel', this.command, collResult.cancelled, this, collResult);
-					let eeeeee = new MessageEmbed()
-					.setAuthor(this.client.user.tag, this.client.user.displayAvatarURL())
-					.setColor(this.client.util.colors.default)
-					.setTitle(`INFO`)
-					.setDescription(`Command Canceled`)
-					return this.embed(eeeeee);
+					return this.embed({embed: {
+						author: {
+							name: this.client.user.tag,
+							icon_url: this.client.user.displayAvatarURL()
+						},
+						color: this.client.util.colors.default,
+						title: "INFO",
+						description: `Command Canceled`
+					}});
 				}
 				args = collResult.values;
 			}
