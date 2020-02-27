@@ -205,7 +205,11 @@ module.exports = Structures.extend('Message', Message => {
 			if(this.command.nsfw && !this.channel.nsfw) {
 				this.client.emit('commandBlock', this, 'nsfw');
 				return this.command.onBlock(this, 'nsfw');
-			}
+			};
+			if(this.command.dmsOnly && this.channel.type !== "dm"){
+				this.client.emit("commandBlock", this, "dmsOnly");
+				return this.command.onBlock(this, `dmsOnly`)
+			};
 
 			// Ensure the user has permission to use the command
 			const hasPermission = this.command.hasPermission(this);
