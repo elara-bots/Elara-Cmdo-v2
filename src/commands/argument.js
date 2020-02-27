@@ -178,14 +178,19 @@ class Argument {
 			}
 
 			// Prompt the user for a new value
-			let er = new MessageEmbed()
-			.setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
-			.setColor(msg.client.getColor(msg.guild))
-			.setTitle(`INFO`)
-			.setDescription(`${empty ? this.prompt : valid ? valid : `You provided an invalid ${this.label}. Please try again.`}`)
-			.normalizeField(`\u200b`, `Respond with \`cancel\` to cancel the command!\nDon't include the prefix and command name`)
-			.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
-			prompts.push(await msg.channel.send(er));
+			prompts.push(await msg.channel.send({embed: {
+				author: {
+					name: msg.client.user.tag,
+					icon_url: msg.client.user.displayAvatarURL()
+				},
+				color: msg.client.getColor(msg.guild),
+				title: `INFO`,
+				description: `${empty ? this.prompt : valid ? valid : `You provied an invalid ${this.label}, please try again.`}`,
+				fields: [{name: `\u200b`, value: `Respond with \`cancel\` to cancel the command!\n***Don't include the prefix and command name***`}],
+				footer: {
+					text: `${wait ? `This command will automatically be canceled in ${this.wait} seconds!` : ""}`
+				}
+			}}));
 
 			// Get the user's response
 			const responses = await msg.channel.awaitMessages(msg2 => msg2.author.id === msg.author.id, {
@@ -264,27 +269,37 @@ class Argument {
 				// Prompt the user for a new value
 				if(val) {
 					const escaped = escapeMarkdown(val).replace(/@/g, '@\u200b');
-					let er = new MessageEmbed()
-					.setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
-					.setColor(msg.client.getColor(msg.guild))
-					.setTitle(`INFO`)
-					.setDescription(`	${valid ? valid : oneLine`
-							You provided an invalid ${this.label},
-							"${escaped.length < 1850 ? escaped : '[too long to show]'}".
-							Please try again.
-						`}`)
-					.normalizeField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.\nDon't include the prefix and command name`)
-					.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
-					prompts.push(await msg.channel.send(er).catch(() => {}));
+					prompts.push(await msg.channel.send({embed: {
+						author: {
+							name: msg.client.user.tag, 
+							icon_url: msg.client.user.displayAvatarURL()
+						},
+						footer: {
+							text: wait ? `This command will automatically be canceled in ${this.wait} seconds!` : ""
+						},
+						fields: [{name: `\u200b`, value: `Respond with \`cancel\` to cancel the command, or \`finish\` to finish the entry up to this point!\n\n***Don't include the prefix and command name***`}],
+						color: msg.client.getColor(msg.guild),
+						title: `INFO`,
+						description: valid ? valid : oneLine`
+						You provided an invalid ${this.label},
+						"${escaped.length < 1850 ? escaped : "Too long to show!"}"
+						Please try again!
+						`
+					}}).catch(() => {}));
 				} else if(results.length === 0) {
-					let er = new MessageEmbed()
-					.setAuthor(msg.client.user.tag, msg.client.user.displayAvatarURL())
-					.setColor(msg.client.getColor(msg.guild))
-					.setTitle(`INFO`)
-					.setDescription(`${this.prompt}`)
-					.normalizeField(`\u200b`, `Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.\nDon't include the prefix and command name`)
-					.setFooter(`${wait ? `The command will automatically be canceled in ${this.wait} seconds` : ""}`)
-					prompts.push(await msg.channel.send(er).catch(() => {}));
+					prompts.push(await msg.channel.send({embed: {
+						author: {
+							name: msg.client.user.tag,
+							icon_url: msg.client.user.displayAvatarURL()
+						},
+						title: `INFO`,
+						color: msg.client.getColor(msg.guild),
+						description: this.prompt,
+						fields: [{name: `\u200b`, value: `Respond with \`cancel\` to cancel the command, or \`finish\` to finish the entry up to this point.\n\n***Don't include the prefix or command name***`}],
+						footer: {
+							text: wait ? `This command will automatically be canceled in ${this.wait} seconds!`: ""
+						}
+					}}).catch(() => {}));
 				}
 
 				// Get the user's response
