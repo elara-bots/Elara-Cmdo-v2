@@ -9,10 +9,7 @@ module.exports = class BotinfoCommand extends Command {
             description: "Gives you the bots information",
             examples: [`${client.commandPrefix}botinfo`],
             clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
-            throttling: {
-                usages: Globalcooldown.usage,
-                duration: Globalcooldown.duration
-            },
+            throttling: Globalcooldown.default,
         })
 
     }
