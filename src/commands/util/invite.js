@@ -30,14 +30,15 @@ module.exports = class NCommand extends Command {
             `[Normal Permissions](https://discordapp.com/api/oauth2/authorize?client_id=${this.client.user.id}&permissions=67488833&scope=bot)`,
             `[No Permissions](https://discordapp.com/oauth2/authorize?client_id=${this.client.user.id}&permissions=0&scope=bot)`
         ]
-        let e = new Discord.MessageEmbed()
-        .setColor(message.guild ? message.guild.color : this.client.util.colors.default)
-        .setAuthor(`Bot Invites`, this.client.user.displayAvatarURL())
-        .setDescription(links.join('\n'))
-        if(user.id === this.client.user.id){
-            e.normalizeField(`Support`, this.client.options.invite);
-        }
-        return message.channel.send(e)
+        return message.channel.send({embed: {
+            color: this.client.getColor(message.guild),
+            author: {
+                name: `Bot Invites`,
+                icon_url: user.displayAvatarURL()
+            },
+            description: links.join("\n"),
+            fields: user.id === this.client.user.id ? [{name: `Support`, value: this.client.options.invite}] : []
+        }})
         }catch(e){
            this.client.handleError(this.client, message, e)
         }
