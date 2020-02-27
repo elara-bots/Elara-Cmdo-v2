@@ -1,4 +1,4 @@
-const RichDisplay = require('./RichDisplay');
+const RichDisplay = require('./RichDisplay'), {MessageEmbed} = require("discord.js")
 
 /**
  * @extends RichDisplay
@@ -140,8 +140,12 @@ class RichMenu extends RichDisplay {
 		const page = this.pages.length;
 		if (this.paginated) return null;
 		super.addPage(embed => {
+				/**
+		 * @param {MessageEmbed} embed
+		 * @returns {MessageEmbed}
+		 */
 			for (let i = 0, option = this.options[i + (page * 10)]; i + (page * 10) < this.options.length && i < 10; i++, option = this.options[i + (page * 10)]) {
-				embed.addField(`(${i}) ${option.name}`, option.body, option.inline);
+				embed.normalizeField(`(${i}) ${option.name}`, option.body, option.inline);
 			}
 			return embed;
 		});
