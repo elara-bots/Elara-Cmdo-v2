@@ -21,11 +21,6 @@ module.exports = class ListGroupsCommand extends Command {
 	}
 
 	run(msg) {
-		return msg.reply(stripIndents`
-			__**Groups**__
-			${this.client.registry.groups.map(grp =>
-				`**${grp.name}:** ${grp.isEnabledIn(msg.guild) ? 'Enabled' : 'Disabled'}`
-			).join('\n')}
-		`);
+		return this.client.error(msg, `**__Command Groups__**\n\n${this.client.registry.groups.map(g => `**${g.name}** (\`${g.id}\`) | ${this.client.f.developer.Enabled(g.isEnabledIn(msg.guild))}`).join("\n")}`)
 	}
 };
