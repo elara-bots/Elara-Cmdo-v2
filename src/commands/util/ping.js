@@ -13,10 +13,7 @@ module.exports = class PingCommand extends Command {
             aliases: ["pong", "pung", `uptime`],
             guildOnly: false,
 	    clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
-            throttling: {
-                usages: Globalcooldown.usage,
-                duration: Globalcooldown.duration
-            },
+            throttling: Globalcooldown.default,
         });
     }
 
