@@ -262,7 +262,7 @@ module.exports = Structures.extend('Message', Message => {
 					 * (if applicable - see {@link Command#run})
 					 */
 					this.client.emit('commandCancel', this.command, collResult.cancelled, this, collResult);
-					return this.embed({embed: {
+					return this.channel.send({embed: {
 						author: {
 							name: this.client.user.tag,
 							icon_url: this.client.user.displayAvatarURL()
