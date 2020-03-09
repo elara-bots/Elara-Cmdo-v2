@@ -10,10 +10,7 @@ module.exports = class NCommand extends Command {
             description: "Gives you a invite for the bot id you provide.",
             group: "info",
             clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
-            throttling: {
-                usages: Globalcooldown.usage,
-                duration: Globalcooldown.duration
-            },
+            throttling: Globalcooldown.default,
             args: [
                 {
                     key: 'user',
