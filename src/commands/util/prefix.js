@@ -10,10 +10,7 @@ module.exports = class NCommand extends Command {
              group: 'bot',
              guarded: true,
              clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
-             throttling: {
-                usages: Globalcooldown.special.usage,
-                duration: Globalcooldown.special.duration
-            },
+             throttling: Globalcooldown.default,
             args: [
               {
                 key: "prefix",
