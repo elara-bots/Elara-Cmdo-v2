@@ -17,13 +17,11 @@ const functions = {
 			return false;
 		}
     },
-	channel: (client, message) => {
+	channel: (message) => {
 		try{
-			if(message.channel.type === "dm") return false
-			let c = message.guild.commands;
-			if(c === "") return false;
-			if(c === message.channel.id && !message.member.hasPermission("MANAGE_MESSAGES") && !client.isOwner(message.author.id)) return true; 
-			else return false;
+			if(message.channel.type === "dm") return false;
+			if(message.guild.commands !== message.channel.id) return true
+			return false;
 		}catch(err){
 			console.log(`[Commands channel, Check] | Error`, err.stack);
 			return false;
@@ -179,9 +177,14 @@ module.exports = Structures.extend('Message', Message => {
 				this.client.emit('commandBlock', this, "maintenance");
 				return this.command.onBlock(this, "maintenance")
 			};
-			if(functions.channel(this.client, this) === true && !this.client.isOwner(this.author)){ // If the channel isn't the commands channel for the server.
+			if(this.channel.type !== "dm"){
+			if(this.member.permissions.has("MANAGE_MESSAGES") === false){
+			if(functions.channel(this) === true && this.guild.client.isOwner(this.author.id) === false){ // If the channel isn't the commands channel for the server.
+				
 				this.client.emit("commandBlock", this, "channel");
 				return this.command.onBlock(this, "channel");
+			}
+			}
 			}
 			if(this.command.guildOnly && !this.guild) {
 				/**
