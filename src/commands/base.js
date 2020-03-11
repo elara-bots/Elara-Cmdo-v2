@@ -34,7 +34,7 @@ const cooldowns = {
 			}).then(m => m.delete({timeout: 10000}).catch(o => {}))
         },
 		cmdschannel: async (message) => {
-			if(!message.guild.me.client.dbs) return null;
+			// if(!message.guild.me.client.dbs) return null;
             if(cooldowns.commands.data.has(message.author.id)) return null;
             if(!cooldowns.commands.data.has(message.author.id)) cooldowns.commands.data.add(message.author.id)
             setTimeout(() => {cooldowns.commands.data.delete(message.author.id)}, cooldowns.commands.time)
