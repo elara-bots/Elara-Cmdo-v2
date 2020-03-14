@@ -152,7 +152,7 @@ class Command {
 		 * Name of the command within the group
 		 * @type {string}
 		 */
-		this.memberName = info.memberName ? info.memberName : info.name;
+		this.memberName = info.memberName || info.name;
 
 		/**
 		 * Short description of the command
@@ -595,9 +595,10 @@ class Command {
 		}
 		if(typeof info.group !== 'string') throw new TypeError('Command group must be a string.');
 		if(info.group !== info.group.toLowerCase()) throw new RangeError('Command group must be lowercase.');
-		if(typeof info.memberName !== 'string') throw new TypeError('Command memberName must be a string.');
-		if(info.memberName !== info.memberName.toLowerCase()) throw new Error('Command memberName must be lowercase.');
-		if(typeof info.description !== 'string') throw new TypeError('Command description must be a string.');
+
+		if(typeof (info.memberName || info.name) !== 'string') throw new TypeError('Command memberName must be a string.');
+		if((info.memberName || info.name) !== (info.memberName || info.name).toLowerCase()) throw new Error('Command memberName must be lowercase.');
+		if(typeof (info.description || "No description set") !== 'string') throw new TypeError('Command description must be a string.');
 		if('format' in info && typeof info.format !== 'string') throw new TypeError('Command format must be a string.');
 		if('details' in info && typeof info.details !== 'string') throw new TypeError('Command details must be a string.');
 		if(info.examples && (!Array.isArray(info.examples) || info.examples.some(ex => typeof ex !== 'string'))) {
