@@ -56,6 +56,7 @@ const cooldowns = {
         }
 }
 /** A command that can be run in a client */
+
 class Command {
 	/**
 	 * @typedef {Object} ThrottlingOptions
@@ -151,13 +152,13 @@ class Command {
 		 * Name of the command within the group
 		 * @type {string}
 		 */
-		this.memberName = info.memberName;
+		this.memberName = info.memberName ? info.memberName : info.name;
 
 		/**
 		 * Short description of the command
 		 * @type {string}
 		 */
-		this.description = info.description;
+		this.description = info.description || "No description set";
 
 		/**
 		 * Usage format string of the command
@@ -175,19 +176,19 @@ class Command {
 		 * Example usage strings
 		 * @type {?string[]}
 		 */
-		this.examples = info.examples || null;
+		this.examples = info.examples || [`${client.commandPrefix}${info.name}`];
 
 		/**
 		 * Whether the command can only be run in a guild channel
 		 * @type {boolean}
 		 */
-		this.guildOnly = Boolean(info.guildOnly);
+		this.guildOnly = Boolean(info.guildOnly || false);
 
 		/**
 		 * Whether the command can only be used by an owner
 		 * @type {boolean}
 		 */
-		this.ownerOnly = Boolean(info.ownerOnly);
+		this.ownerOnly = Boolean(info.ownerOnly || false);
 
 		/**
 		 * Whether the command can only be used in DMs
@@ -212,7 +213,7 @@ class Command {
 		 * Whether the command can only be used in NSFW channels
 		 * @type {boolean}
 		 */
-		this.nsfw = Boolean(info.nsfw);
+		this.nsfw = Boolean(info.nsfw || false);
 
 		/**
 		 * Whether the default command handling is enabled for the command
