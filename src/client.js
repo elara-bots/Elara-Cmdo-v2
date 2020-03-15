@@ -161,15 +161,12 @@ class CommandoClient extends discord.Client {
 			if(!db) return null;
 			return db;
 		};
-		this.getMutual = (user) => {
+		this.getMutual = async (user) => {
 			let search = user;
 			if(user.hasOwnProperty("id")) search = user.id;
-
-			this.users.fetch(search).then((u) => {
-				return this.guilds.cache.filter(g => g.members.cache.has(u.id));
-			}).catch((err) => {
-				return []
-			});
+			let fUser = await this.users.fetch(search).catch(() => {});
+			if(!fUser) return [];
+			return this.guilds.cache.filter(g => g.members.cache.has(fUser.id));
 		};
 		this.handleError = (client, message, error) => {
 			client.error(message, error.message);
