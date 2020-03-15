@@ -20,6 +20,7 @@ const functions = {
 	channel: (message) => {
 		try{
 			if(message.channel.type === "dm") return false;
+			if(!message.guild.commands || message.guild.commands === "") return false;
 			if(message.guild.commands !== message.channel.id) return true
 			return false;
 		}catch(err){
