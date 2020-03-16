@@ -34,29 +34,29 @@ module.exports = class NCommand extends Command {
           this.client.dbs.settings.findOne({guildID: message.guild.id}, async (err, db) => {
             if(db){
               if(prefix !== ""){
-              if(!message.member.hasPermission("MANAGE_GUILD")) return this.client.error(this.client, message, `You need the \`Manage Server\` permission to change the prefix!`);
+              if(!message.member.hasPermission("MANAGE_GUILD")) return this.client.error(message, `You need the \`Manage Server\` permission to change the prefix!`);
               if(prefix.toLowerCase() === "reset" || prefix.toLowerCase() === "default" || db.prefix.toLowerCase() === prefix.toLowerCase()){
               db.prefix = "";
               db.save().catch(err => console.log(err));
-              message.guild._commandPrefix = this.client.commandPrefix;
+              message.guild.commandPrefix = this.client.commandPrefix;
               e.setDescription(`Use \`${this.client.commandPrefix}\` for commands!`).setTitle(`Prefix reset`);
-              return message.channel.send(e)
+              return message.channel.send(e).catch(() => {})
               }else{
                 db.prefix = prefix.toLowerCase();
                 db.save().catch(err => console.log(err));
-                message.guild._commandPrefix = prefix;
+                message.guild.commandPrefix = prefix.toLowerCase();
                 e.setDescription(`Use \`${prefix}\` for commands!`).setTitle(`New Prefix`);
-                return message.channel.send(e)
+                return message.channel.send(e).catch(() => {})
               }
               }else{
               e.setTitle(`Prefix`).setAuthor(message.guild.name, message.guild.iconURL()).setDescription(db.prefix || this.client.commandPrefix)
               if(message.member.hasPermission("MANAGE_GUILD")) e.setFooter(`Note: To change the prefix do ${db.prefix || this.client.commandPrefix}setprefix [newprefix]`);
-              return message.channel.send(e)
+              return message.channel.send(e).catch(() => {})
               }
             }else{
               e.setTitle(`Prefix`).setAuthor(message.guild.name, message.guild.iconURL()).setDescription(this.client.commandPrefix)
               if(message.member.hasPermission("MANAGE_GUILD")) e.setFooter(`Note: To change the prefix do ${this.client.commandPrefix}setprefix [newprefix]`);
-              return message.channel.send(e)
+              return message.channel.send(e).catch(() => {})
             }
           });
         }else{
