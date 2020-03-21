@@ -185,7 +185,7 @@ class Argument {
 				},
 				color: msg.client.getColor(msg.guild),
 				title: `INFO`,
-				description: `${empty ? this.prompt : valid ? valid : `You provied an invalid ${this.label}, please try again.`}`,
+				description: `${empty ? this.prompt : valid ? valid : `You provided an invalid ${this.label}, please try again.`}`,
 				fields: [{name: `\u200b`, value: `Respond with \`cancel\` to cancel the command!\n***Don't include the prefix and command name***`}],
 				footer: {
 					text: `${wait ? `This command will automatically be canceled in ${this.wait} seconds!` : ""}`
