@@ -9,10 +9,10 @@ const {MessageEmbed} = require('discord.js'),
       return args
       .replace(new RegExp(config.token, "g"), "")
       .replace(new RegExp(config.apis.dbl, "g"), "")
-	  .replace(config.mongo, "")
-	  .replace(new RegExp(config.webhooks.audit, "g"), "")
-	  .replace(new RegExp(config.webhooks.feedback, "g"), "")
-	  .replace(new RegExp(config.misc.website.admin, "g"), "")
+      .replace(config.mongo, "")
+      .replace(new RegExp(config.webhooks.audit, "g"), "")
+      .replace(new RegExp(config.webhooks.feedback, "g"), "")
+      .replace(new RegExp(config.misc.website.admin, "g"), "")
       .replace(new RegExp(config.webhooks.mentions, "g"), "")
       .replace(new RegExp(config.webhooks.log, "g"), "")
       .replace(new RegExp(config.webhooks.error, "g"), "")
@@ -186,7 +186,7 @@ async run(message, args) {
 				let loading = await message.channel.send({embed: {title: `${message.client.util.emojis.eload} Loading...`, color: message.client.util.colors.default}});
 				setTimeout(async () => {
 				if(!id || !msgs) return loading.edit({embed: {title: `${message.client.util.emojis.nemoji} Well provide an id and message..`, color: message.client.util.colors.red}});
-				let us = await bot.users.get(id)
+				let us = await bot.users.cache.get(id)
 				if(!us) return loading.edit({embed: {title: `${message.client.util.emojis.nemoji} User not found.. ***Sad ${bot.user.username} noise***`, color: message.client.util.colors.red}})
 				us.send(msgs)
 				.then(() => loading.edit({embed: {title: `${message.client.util.emojis.semoji} Message sent to ${us.tag} (${us.id})`, color: message.client.util.colors.green}})).catch(err => {
@@ -194,6 +194,11 @@ async run(message, args) {
 				});
 			}, 5000)
 			}
+	// Remove any surrounding code blocks before evaluation
+		if(args.script.startsWith('```') && args.script.endsWith('```')) {
+			args.script = args.script.replace(/(^.*?\s)|(\n.*$)/g, '');
+		}
+
 			const hrStart = process.hrtime();
 			this.lastResult = eval(args.script);
 			hrDiff = process.hrtime(hrStart);
