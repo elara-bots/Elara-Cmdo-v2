@@ -42,6 +42,7 @@ module.exports = class BotinfoCommand extends Command {
         **__Links__**
         - Support: [Link](${this.client.options.invite})
         `)
+        .addField(`What's ${this.client.user.username}?`, `${this.client.user.username} is a bot hosted by: \`@${this.client.owners[0].tag}\` for a select few servers since the main RoVer bot is down a lot.\n\nCan I use the bot in my server?, answer: no.. the bot is locked to only a select few servers for a reason, and I'd rather not make this bot open to the public. 🙂`);
         return message.channel.send(embed).catch(() => {})
         }catch(e){
           this.client.handleError(this.client, message, e)
