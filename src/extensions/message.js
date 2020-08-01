@@ -7,9 +7,6 @@ const CommandFormatError = require('../errors/command-format');
 const functions = {
 	blacklist: async (client, message) => {
 		try{
-            if(message.guild){
-            if((client.config.ignore.guilds || []).includes(message.guild.id)) return true
-            };
             if((client.GlobalUsers || []).includes(message.author.id)) return true
             else return false;
 		}catch(err){
