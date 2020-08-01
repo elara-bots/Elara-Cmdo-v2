@@ -1,6 +1,5 @@
 const {MessageEmbed} = require('discord.js'),
 	  {Command, util: {escapeRegex}, eutil} = require('elaracmdo'),
-	  config = require('../../../../../src/util/config'),
 	  util = require('util'),
       moment = require("moment"),
       ms = require("ms"),
