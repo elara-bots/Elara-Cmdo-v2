@@ -93,10 +93,10 @@ class CommandoClient extends discord.Client {
 		* @type {ElaraUtil}
 		*/
 		this.util = eutil;
-        this.GlobalCmds = []; 
+        	this.GlobalCmds = []; 
 		this.main = false; 
 		this.GlobalUsers = [];
-        this.afkUsers = new discord.Collection();
+        	this.afkUsers = new discord.Collection();
 		/**
 		* To get the prefix of the guild/client provided
 		* @type {function}
@@ -167,8 +167,8 @@ class CommandoClient extends discord.Client {
 				channel.send(content).catch(() => {});
 			}else
 			if(!isNaN(channel)){
-			  let ch = this.channels.get(channel);
-			  if(!ch) ch = this.users.get(channel);
+			  let ch = this.channels.cache.get(channel);
+			  if(!ch) ch = this.users.cache.get(channel);
 			  if(!ch) return null;
 			  ch.send(content).catch(() => {});
 			}
@@ -227,7 +227,7 @@ class CommandoClient extends discord.Client {
 	 */
 	get owners() {
 		if(!this.options.owner) return null;
-		if(typeof this.options.owner === 'string') return [this.users.get(this.options.owner)];
+		if(typeof this.options.owner === 'string') return [this.users.cache.get(this.options.owner)];
 		const owners = [];
 		for(const owner of this.options.owner) owners.push(this.users.get(owner));
 		return owners;
