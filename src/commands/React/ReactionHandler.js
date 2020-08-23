@@ -111,7 +111,7 @@ class ReactionHandler extends ReactionCollector {
 		else return this.stop();
 
 		this.on('collect', (reaction, user) => {
-			reaction.users.forEach(m => {
+			reaction.users.cache.forEach(m => {
 				if(m.id === this.client.user.id){
 					return;
 				}else{
