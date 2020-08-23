@@ -129,7 +129,7 @@ class CommandoClient extends discord.Client {
 			if(user.hasOwnProperty("id")) search = user.id;
 
 			this.users.fetch(search).then((u) => {
-				return this.guilds.filter(g => g.members.has(u.id));
+				return this.guilds.cache.filter(g => g.members.cache.has(u.id));
 			}).catch((err) => {
 				return []
 			});
@@ -229,7 +229,7 @@ class CommandoClient extends discord.Client {
 		if(!this.options.owner) return null;
 		if(typeof this.options.owner === 'string') return [this.users.cache.get(this.options.owner)];
 		const owners = [];
-		for(const owner of this.options.owner) owners.push(this.users.get(owner));
+		for(const owner of this.options.owner) owners.push(this.users.cache.get(owner));
 		return owners;
 	}
 
