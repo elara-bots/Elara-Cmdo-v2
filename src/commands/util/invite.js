@@ -16,7 +16,7 @@ module.exports = class NCommand extends Command {
                     key: 'user',
                     prompt: 'Please provide the bot id.',
                     type: 'user',
-                    default: msg => msg.client.user.id
+                    default: msg => msg.client.user
                 }
             ]
         })
