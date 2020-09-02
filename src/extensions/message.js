@@ -148,7 +148,21 @@ module.exports = Structures.extend('Message', Message => {
 					throw new RangeError(`Unknown argsType "${this.argsType}".`);
 			}
 		}
-
+/**
+		
+		@returns {Promise<Message>}
+		*/
+		crosspost(){
+		 if(this.channel.type !== "news") throw new Error(`You can only crosspost messages in a news channel!`)
+		  require("superagent")
+		   .post(`https://discord.com/api/v6/channels/${this.channel.id}/messages/${this.id}/crosspost`)
+		   .set(`Authorization`, `Bot ${this.client.token}`)
+	            .then(res => {
+		   	return res.body;
+		   }).catch(err => {
+		   	throw new Error(`Crosspost error: ${err.stack}`);
+		   })
+		}
 		/**
 		 * Runs the command
 		 * @return {Promise<?Message|?Array<Message>>}
