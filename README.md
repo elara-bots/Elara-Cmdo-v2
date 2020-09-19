@@ -1,2 +1,2 @@
 # WARNING
-This package is deprecated, the new version will be released at a later date.
+This package is deprecated, the new one is under the name "elaracmdo" all lowercase.
