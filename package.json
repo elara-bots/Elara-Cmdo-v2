@@ -1,6 +1,6 @@
 {
 	"name": "elaracmdo",
-	"version": "4.0.1",
+	"version": "4.0.2",
 	"description": "Modified Commando Framework.",
 	"license": "",
 	"author": "SUPERCHIEFYT (Elara-Discord-Bots)",
@@ -29,7 +29,7 @@
 		"typescript": "^3.1.6"
 	},
 	"peerDependencies": {
-		"discord.js": "github:discordjs/discord.js#master"
+		"discord.js": "^12.4.1"
 	},
 	"engines": {
 		"node": ">=13.9.0"
