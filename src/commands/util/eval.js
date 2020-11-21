@@ -97,6 +97,7 @@ async run(message, args) {
 			}, 5000)
 			}
 	// Remove any surrounding code blocks before evaluation
+		args.script = args.script.replace(/-async|-a|--async|{async}|-ignore|-i/gi, "");
 		if(args.script.startsWith('```') && args.script.endsWith('```')) {
 			args.script = args.script.replace(/(^.*?\s)|(\n.*$)/g, '');
 		}
@@ -104,8 +105,7 @@ async run(message, args) {
 			let sync = ["-a", "-async", "--async", "{async}"]
 			let c = sync.filter(c => msg.content.toLowerCase().includes(c.toLowerCase()));
 			const hrStart = process.hrtime();
-			args.script = args.script.replace(/-ignore|-i/gi, "")
-			this.lastResult = eval(c.length !== 0 ? `(async () => {\n${args.script.replace(/-async|-a|--async|{async}/gi, "")}\n})();` : args.script);
+			this.lastResult = eval(c.length !== 0 ? `(async () => {\n${args.script}\n})();` : args.script);
 			if(this.lastResult instanceof Promise && typeof this.lastResult === "object"){
 				this.lastResult = await this.lastResult;
 			}
