@@ -75,7 +75,7 @@ async run(message, args) {
 				let emg = new MessageEmbed()
 				.setTitle(`Response`)
 				if(res.length >= 2040){
-				emg.setDescription(await f.misc.bin("Output", eh))
+				emg.setDescription(await client.bin("Output", eh))
 				}else{
 				emg.setDescription(`${eh.includes("https://") ? `${eh.replace(/'|'/gi, "")}` : `\`\`\`js\n${eh}\`\`\``}`)
 				}
@@ -126,7 +126,7 @@ async run(message, args) {
 				if(response.length >= 2040){
 					evalembed
 					.setTitle(`Result`)
-					.setDescription(await this.client.f.misc.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
+					.setDescription(await this.client.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
 					.setFooter(`Executed in: ${time[0]}`)
 					return message.say(evalembed);
 				}
@@ -140,7 +140,7 @@ async run(message, args) {
 			if(response.length >= 2040){
 				evalembed
 				.setTitle(`Result`)
-				.setDescription(await this.client.f.misc.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
+				.setDescription(await this.client.bin('Output', await this.pastebinresponse(this.lastResult, hrDiff, args.script, message.editable)))
 				.setFooter(`Executed in: ${time[0]}`)
 				return message.say(evalembed);
 			}
