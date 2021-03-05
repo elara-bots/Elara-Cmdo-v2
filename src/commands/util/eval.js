@@ -105,8 +105,14 @@ async run(message, args) {
 				});
 			}, 5000)
 			}
+			let sync = ["-a", "-async", "--async", "{async}"]
+			let c = sync.filter(c => msg.content.toLowerCase().includes(c.toLowerCase()));
 			const hrStart = process.hrtime();
-			this.lastResult = eval(args.script);
+			if (args.script.startsWith('```js') && args.script.endsWith('```')) args.script = args.script.replace('```js', '').replace('```', '');
+			args.script = args.script.replace(/-ignore|-i/gi, "")
+			this.lastResult = eval(c.length !== 0 ? `(async () => {\n${args.script.replace(/-async|-a|--async|{async}/gi, "")}\n})();` : args.script);
+			if(this.lastResult instanceof Promise && typeof this.lastResult === "object") this.lastResult = await this.lastResult;
+			if(this.lastResult === undefined && msg.content.toLowerCase().match(/-ignore|-i/gi)) return null;
 			hrDiff = process.hrtime(hrStart);
 		} catch(err) {
 			evalembed.setTitle(`Error while evaluating`).setDescription(`\`\`\`diff\n- ${err}\`\`\``)
