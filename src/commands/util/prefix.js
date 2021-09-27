@@ -34,7 +34,7 @@ module.exports = class NCommand extends Command {
           this.client.dbs.settings.findOne({guildID: message.guild.id}, async (err, db) => {
             if(db){
               if(prefix !== ""){
-              if(!message.member.hasPermission("MANAGE_GUILD")) return this.client.error(this.client, message, `You need the \`Manage Server\` permission to change the prefix!`);
+              if(!message.member.permissions.has("MANAGE_GUILD")) return this.client.error(this.client, message, `You need the \`Manage Server\` permission to change the prefix!`);
               if(prefix.toLowerCase() === "reset" || prefix.toLowerCase() === "default" || db.prefix.toLowerCase() === prefix.toLowerCase()){
               db.prefix = "";
               db.save().catch(err => console.log(err));
@@ -50,12 +50,12 @@ module.exports = class NCommand extends Command {
               }
               }else{
               e.setTitle(`Prefix`).setAuthor(message.guild.name, message.guild.iconURL()).setDescription(db.prefix || this.client.commandPrefix)
-              if(message.member.hasPermission("MANAGE_GUILD")) e.setFooter(`Note: To change the prefix do ${db.prefix || this.client.commandPrefix}setprefix [newprefix]`);
+              if(message.member.permissions.has("MANAGE_GUILD")) e.setFooter(`Note: To change the prefix do ${db.prefix || this.client.commandPrefix}setprefix [newprefix]`);
               return message.channel.send(e)
               }
             }else{
               e.setTitle(`Prefix`).setAuthor(message.guild.name, message.guild.iconURL()).setDescription(this.client.commandPrefix)
-              if(message.member.hasPermission("MANAGE_GUILD")) e.setFooter(`Note: To change the prefix do ${this.client.commandPrefix}setprefix [newprefix]`);
+              if(message.member.permissions.has("MANAGE_GUILD")) e.setFooter(`Note: To change the prefix do ${this.client.commandPrefix}setprefix [newprefix]`);
               return message.channel.send(e)
             }
           });

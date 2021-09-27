@@ -22,7 +22,7 @@ const functions = {
 			if(message.channel.type === "dm") return false
 			let c = message.guild.commands;
 			if(c === "") return false;
-			if(c === message.channel.id && !message.member.hasPermission("MANAGE_MESSAGES") && !client.isOwner(message.author.id)) return true; 
+			if(c === message.channel.id && !message.member.permissions.has("MANAGE_MESSAGES") && !client.isOwner(message.author.id)) return true; 
 			else return false;
 		}catch(err){
 			console.log(`[Commands channel, Check] | Error`, err.stack);

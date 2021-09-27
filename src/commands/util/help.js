@@ -83,8 +83,8 @@ module.exports = class HelpCommand extends Command {
             groups.forEach(g => {
                 if(g.commands.size === 0) return null;
                 let commands = g.commands.map(c => `**${c.name}**${c.nsfw ? "(NSFW)" : ""} - ${c.description}`)
-                if(g.id === "admin" && !message.member.hasPermission(`MANAGE_GUILD`)) return;
-                if(g.id === "mod" && !message.member.hasPermission("MANAGE_MESSAGES")) return;
+                if(g.id === "admin" && !message.member.permissions.has(`MANAGE_GUILD`)) return;
+                if(g.id === "mod" && !message.member.permissions.has("MANAGE_MESSAGES")) return;
                 if(g.id === ("owner" || "owner/misc") && !this.client.isOwner(message.author.id)) return;
                 display.addPage(e => e.setDescription(`${commands.join('\n')}`).setTitle(g.name))
             });
