@@ -15,8 +15,6 @@
 	"types": "./typings/index.d.ts",
 	"dependencies": {
 		"common-tags": "^1.8.0",
-		"moment": "^2.24.0",
-		"moment-duration-format": "^2.2.2",
 		"require-all": "^3.0.0",
 		"request": "^2.88.0",
 		"querystring": "^0.2.0",
@@ -27,9 +25,6 @@
 		"discord.js-docgen": "discordjs/docgen",
 		"eslint": "^5.1.0",
 		"typescript": "^3.1.6"
-	},
-	"peerDependencies": {
-		"discord.js": "github:discordjs/discord.js"
 	},
 	"engines": {
 		"node": ">=8.6.0"
