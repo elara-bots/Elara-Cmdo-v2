@@ -28,10 +28,7 @@ const cooldowns = {
 					color: 0xFF0000,
 					description: `Likely Causes: Roblox outage or updates to the bot.`,
 					timestamp: new Date(),
-					footer: {
-						text: `This message will be deleted in 10 seconds.`
-					},
-					fields: [{name: `Support Server`, value: msg.client.options.invite, inline: true}]
+					fields: [{name: `Support`, value: msg.client.options.invite, inline: true}]
 				}
 			}).catch(() => null);
         },
