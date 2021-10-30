@@ -16,22 +16,24 @@ const cooldowns = {
 		msg: (msg) => {
             if(cooldowns.maintenance.data.has(msg.author.id)) return null;
             if(!cooldowns.maintenance.data.has(msg.author.id)) cooldowns.maintenance.data.add(msg.author.id)
-            setTimeout(() => {cooldowns.maintenance.data.delete(msg.author.id)}, cooldowns.maintenance.time)
+            setTimeout(() => cooldowns.maintenance.data.delete(msg.author.id), cooldowns.maintenance.time)
             return msg.channel.send({
 				embed: {
 					title: `Maintenance Mode`,
 					author: {
 						name: msg.client.user.tag,
-						value: msg.client.user.displayAvatarURL()
+						icon_url: msg.client.user.displayAvatarURL(),
+						url: msg.client.options.invite
 					},
-					color: msg.client.getColor(msg.guild),
+					color: 0xFF0000,
+					description: `Likely Causes: Roblox outage or updates to the bot.`,
 					timestamp: new Date(),
 					footer: {
 						text: `This message will be deleted in 10 seconds.`
 					},
 					fields: [{name: `Support Server`, value: msg.client.options.invite, inline: true}]
 				}
-			}).then(m => m.delete({timeout: 10000}).catch(o => {}))
+			}).catch(() => null);
         },
 		cmdschannel: async (message) => {
 			// if(!message.guild.me.client.dbs) return null;
