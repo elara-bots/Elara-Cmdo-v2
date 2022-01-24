@@ -1,6 +1,4 @@
 const { ReactionCollector } = require('discord.js');
-const {CommandoMessage} = require('elaracmdo');
-const {MessageEmbed} = require('discord.js');
 /**
  * @extends ReactionCollector
  */
