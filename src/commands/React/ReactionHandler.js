@@ -1,6 +1,5 @@
 const { ReactionCollector } = require('discord.js');
-const {CommandoMessage} = require('elaracmdo');
-const {MessageEmbed} = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 /**
  * @extends ReactionCollector
  */
@@ -26,7 +25,7 @@ class ReactionHandler extends ReactionCollector {
 	/**
 	 * Constructs our ReactionHandler instance
 	 * @since 0.4.0
-	 * @param {CommandoMessage} message A message this ReactionHandler should handle reactions
+	 * @param {import("elaracmdo").CommandoMessage} message A message this ReactionHandler should handle reactions
 	 * @param {Function} filter A filter function to determine which emoji reactions should be handled
 	 * @param {ReactionHandlerOptions} options The options for this ReactionHandler
 	 * @param {(RichDisplay|RichMenu)} display The RichDisplay or RichMenu that this handler is for
@@ -114,10 +113,10 @@ class ReactionHandler extends ReactionCollector {
 			reaction.users.cache.filter(u => !u.bot).forEach(m => reaction.users.remove(m.id))
 			this[this.methodMap.get(reaction.emoji.name)](user);
 		});
-		setTimeout(() => {this.emit("end")}, this.time || 120000)
+		setTimeout(() => { this.emit("end") }, this.time || 120000)
 		this.on('end', () => {
 			if (this.reactionsDone && !this.message.deleted) this.message.reactions.removeAll();
-				let e = new MessageEmbed()
+			let e = new MessageEmbed()
 				.setAuthor(' ', " ", " ")
 				.setTitle(`Menu Closed`)
 				.setDescription(' ')
@@ -126,14 +125,15 @@ class ReactionHandler extends ReactionCollector {
 				.setThumbnail(' ')
 				.setImage(' ')
 				.setURL(' ')
-				e.fields.forEach(c => c.pop())
-				
-				setTimeout(async () => {this.message.edit(e).then(async () => {
-				await this.message.delete({ timeout: 20000, reason: "Auto" });
+			e.fields.forEach(c => c.pop())
+
+			setTimeout(async () => {
+				this.message.edit(e).then(async () => {
+					await this.message.delete({ timeout: 20000, reason: "Auto" });
 				})
 			}, 5000)
-			})
-}
+		})
+	}
 
 	/**
 	 * The action to take when the "first" emoji is reacted
