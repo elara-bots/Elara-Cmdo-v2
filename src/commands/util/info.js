@@ -8,27 +8,23 @@ module.exports = class BotinfoCommand extends Command {
             aliases: [`info`, `binfo`],
             description: "Gives you the bots information",
             examples: [`${client.commandPrefix}botinfo`],
-            clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"],
-            throttling: {
-                usages: Globalcooldown.usage,
-                duration: Globalcooldown.duration
-            },
+            clientPermissions: ["EMBED_LINKS", "SEND_MESSAGES"]
         })
 
     }
     async run(message) {
-        try{
-        const statuses = {
-            "online": "Online", 
-            "idle": "Idle",
-            "dnd": "DND",
-            "invisible": "Offline"
-        }
-        let embed = new Discord.MessageEmbed()
-        .setAuthor(`Information about myself`, this.client.user.displayAvatarURL())
-        .setColor(this.client.getColor(message.guild))
-        .setThumbnail(this.client.user.displayAvatarURL())
-        .setDescription(`
+        try {
+            const statuses = {
+                "online": "Online",
+                "idle": "Idle",
+                "dnd": "DND",
+                "invisible": "Offline"
+            }
+            let embed = new Discord.MessageEmbed()
+                .setAuthor(`Information about myself`, this.client.user.displayAvatarURL())
+                .setColor(this.client.getColor(message.guild))
+                .setThumbnail(this.client.user.displayAvatarURL())
+                .setDescription(`
         **__User__**
         - Name: ${this.client.user.username}
         - ID: ${this.client.user.id}
@@ -46,9 +42,9 @@ module.exports = class BotinfoCommand extends Command {
         - Support: [Link](${this.client.options.invite})
         - Feedback & Bug Reports: [Link](https://services.superchiefyt.tk/site/feedback)
         `)
-        return message.channel.send(embed).catch(() => {})
-        }catch(e){
-          this.client.handleError(this.client, message, e)
+            return message.channel.send(embed).catch(() => { })
+        } catch (e) {
+            this.client.handleError(this.client, message, e)
         }
     }
 }

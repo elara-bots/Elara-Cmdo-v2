@@ -16,7 +16,7 @@ module.exports = class ListGroupsCommand extends Command {
 	}
 
 	hasPermission(msg) {
-		if(!msg.guild) return this.client.isOwner(msg.author);
+		if (!msg.guild) return this.client.isOwner(msg.author);
 		return msg.member.permissions.has('ADMINISTRATOR') || this.client.isOwner(msg.author);
 	}
 
@@ -24,8 +24,8 @@ module.exports = class ListGroupsCommand extends Command {
 		return msg.reply(stripIndents`
 			__**Groups**__
 			${this.client.registry.groups.map(grp =>
-				`**${grp.name}:** ${grp.isEnabledIn(msg.guild) ? 'Enabled' : 'Disabled'}`
-			).join('\n')}
+			`**${grp.name}:** ${grp.isEnabledIn(msg.guild) ? 'Enabled' : 'Disabled'}`
+		).join('\n')}
 		`);
 	}
 };
