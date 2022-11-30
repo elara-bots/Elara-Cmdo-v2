@@ -6,15 +6,7 @@ const { MessageEmbed } = require('discord.js'),
 	ms = require("ms"),
 	time = [],
 	filterArgs = (args) => {
-		return args
-			.replace(new RegExp(config.token, "g"), "")
-			.replace(config.mongo, "")
-			.replace(new RegExp((config.webhooks.audit || "Not set"), "g"), "")
-			.replace(new RegExp((config.misc.website.admin || "Not set"), "g"), "")
-			.replace(new RegExp((config.webhooks.log || "Not set"), "g"), "")
-			.replace(new RegExp((config.webhooks.error || "Not set"), "g"), "")
-			.replace(new RegExp((config.webhooks.servers || "Not set"), "g"), "")
-			.replace(new RegExp((config.webhooks.action || "Not set"), "g"), "")
+		return args.replace(new RegExp(config.token, "g"), "")
 	};
 require("moment-duration-format")
 module.exports = class EvalCommand extends Command {
